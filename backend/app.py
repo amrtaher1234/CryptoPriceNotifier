@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-from services.mail.mail import MailController
+from services.mail import MailController
 from flask_mail import Message
 
 
