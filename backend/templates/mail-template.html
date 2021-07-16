@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+  <html>
+    <head>
+      <title>Flask app</title>
+      <style>
+        header {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: center;
+        }
+        header h1 {
+          margin-right: 10px;
+          font-size: 32px;
+        }
+        header img {
+          width: 64px;
+          height: 64px;
+        }
+        hr.solid {
+          border-top: 3px solid #bbb;
+        }
+        ul {
+          padding: 0;
+          list-style: none;
+        }
+      </style>
+    </head>
+    <header>
+      <h1>Crypto Price Notifier</h1>
+      {{content}}
+      <img src="https://img.icons8.com/color/48/000000/bitcoin--v3.png" />
+    </header>
+    <hr class="solid" />
+
+    <section>
+      <h2>Your Resources Summary</h2>
+      <ul>
+        {% for resource in resources %}
+        <li> 
+        <span>{{resource.name}}<span>
+        <span>{{resource.price}}</span>
+        </li>
+        {% endfor %}
+      </ul>
+    </section>
+    <img src="https://hatrabbits.com/wp-content/uploads/2017/01/random.jpg" />
+    <h3> This is a generated message from @CryptoPriceNotifier.org <h3>
+
+  </html>
+</html>
