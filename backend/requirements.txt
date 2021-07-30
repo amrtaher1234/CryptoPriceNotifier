@@ -1,2 +1,5 @@
 flask
 flask-mail
+matplotlib
+pandas
+numpy
