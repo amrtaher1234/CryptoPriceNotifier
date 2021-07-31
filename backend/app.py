@@ -6,6 +6,8 @@ import base64
 from io import BytesIO
 from matplotlib.figure import Figure
 
+import matplotlib.pylab as plt
+
 import yfinance as yf
 
 app = Flask(__name__)
@@ -31,7 +33,8 @@ def index():
             },
         ]
         msg = Message('Hello from the other side!',
-                      sender='amrtaher1995@gmail.com', recipients=['amrtaher1995@gmail.com', 'yar2nman@gmail.com'])
+                    #   sender='amrtaher1995@gmail.com', recipients=['amrtaher1995@gmail.com', 'yar2nman@gmail.com'])
+                      sender='amrtaher1995@gmail.com', recipients=['yar2nman@gmail.com'])
         msg.html = render_template('mail-template.html', resources=resources)
         msg.body = "Hello Crypto"
         mailController.sendMessage(msg)
@@ -78,7 +81,7 @@ def image():
     return f"<img src='data:image/png;base64,{data}'/>"
 
 
-# return chart showing stock movement
+# return DataFrame showing sympol movement
 @app.route("/sympol/<sympol>")
 def sympol(sympol='MSFT'):
     try:
@@ -87,5 +90,18 @@ def sympol(sympol='MSFT'):
         return df[-1:-5].to_html(classes='table table-striped')
     except:
         return 'Error'
-        
 
+# return Chart showing sympol movement        
+@app.route('/sympolechart/<sympol>')
+def sympolechart(sympol='MSFT'):
+    try:
+        print('')
+        plt.switch_backend('agg')
+        df = yf.Ticker(sympol)
+        fig = df.history(periods='1y', frequency='1').Open.plot(figsize=(10, 6)).get_figure()
+        buf = BytesIO()
+        fig.savefig(buf, format="png")
+        data = base64.b64encode(buf.getbuffer()).decode("ascii")
+        return f"<img src='data:image/png;base64,{data}'/>"
+    except:
+        return 'Error'
