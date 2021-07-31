@@ -6,6 +6,8 @@ import base64
 from io import BytesIO
 from matplotlib.figure import Figure
 
+import yfinance as yf
+
 app = Flask(__name__)
 mailController = MailController(app)
 mailController.setConfig()
@@ -63,7 +65,7 @@ def html():
 
 
 @app.route("/image")
-def hello():
+def image():
     # Generate the figure **without using pyplot**.
     fig = Figure()
     ax = fig.subplots()
@@ -74,3 +76,16 @@ def hello():
     # Embed the result in the html output.
     data = base64.b64encode(buf.getbuffer()).decode("ascii")
     return f"<img src='data:image/png;base64,{data}'/>"
+
+
+# return chart showing stock movement
+@app.route("/sympol/<sympol>")
+def sympol(sympol='MSFT'):
+    try:
+        print('')
+        df = yf.download(sympol)
+        return df[-1:-5].to_html(classes='table table-striped')
+    except:
+        return 'Error'
+        
+

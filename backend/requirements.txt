@@ -3,3 +3,4 @@ flask-mail
 matplotlib
 pandas
 numpy
+yfinance
