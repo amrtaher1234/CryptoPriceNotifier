@@ -105,3 +105,14 @@ def sympolechart(sympol='MSFT'):
         return f"<img src='data:image/png;base64,{data}'/>"
     except:
         return 'Error'
+
+
+# return Sympol metadata
+@app.route("/sympol/<sympol>/metadata")
+def sympolmetadata(sympol='MSFT'):
+    try:
+        print('')
+        df = yf.Ticker(sympol).get_info()
+        return {'data': df, 'status': 200, 'message': f'Sympol {sympol}'}
+    except:
+        return 'Error'

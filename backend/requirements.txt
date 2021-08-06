@@ -1,6 +1,6 @@
 flask
 flask-mail
-matplotlib
+matplotlib==3.4.2
 pandas
 numpy
 yfinance
