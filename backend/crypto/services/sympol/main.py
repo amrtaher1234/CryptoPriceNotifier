@@ -12,9 +12,9 @@ class sympolController():
 
     def getSymbolInfo(self):
          try:
-            print('')
-            df = yf.Ticker(self.sympol).get_info()
-            return {'data': df, 'status': 200, 'message': f'Sympol {self.sympol}'}
+            df = yf.Ticker(self.sympol)
+            dfx = df.get_info()
+            return {'data': dfx, 'status': 200, 'message': f'Sympol {self.sympol}'}
          except:
             return 'Error'
 
@@ -27,6 +27,14 @@ class sympolController():
             fig.savefig(buf, format="png")
             data = base64.b64encode(buf.getbuffer()).decode("ascii")
             return data       
+        except:
+            return 'Error'
+
+    def getSympolDataFrame(self):
+        try:
+            sym = yf.Ticker(self.sympol)
+            df = sym.history(period='max')
+            return df
         except:
             return 'Error'
 
