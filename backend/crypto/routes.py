@@ -3,13 +3,11 @@ from flask_mail import Message
 from crypto import app
 from crypto.services.mail import MailController
 
-import base64
-from io import BytesIO
-from matplotlib.figure import Figure
 
-import matplotlib.pylab as plt
 
-import yfinance as yf
+from crypto.services.sympol import SymbolController as sym
+
+
 
 mailController = MailController(app)
 mailController.setConfig()
@@ -85,9 +83,8 @@ def image():
 @app.route("/sympol/<sympol>")
 def sympol(sympol='MSFT'):
     try:
-        print('')
-        df = yf.download(sympol)
-        return df[-1:-5].to_html(classes='table table-striped')
+        msyminfo = sym(sympol).getSympolInfo()
+        return msyminfo
     except:
         return 'Error'
 
@@ -95,14 +92,8 @@ def sympol(sympol='MSFT'):
 @app.route('/sympolechart/<sympol>')
 def sympolechart(sympol='MSFT'):
     try:
-        print('')
-        plt.switch_backend('agg')
-        df = yf.Ticker(sympol)
-        fig = df.history(periods='1y', frequency='1').Open.plot(figsize=(10, 6)).get_figure()
-        buf = BytesIO()
-        fig.savefig(buf, format="png")
-        data = base64.b64encode(buf.getbuffer()).decode("ascii")
-        return f"<img src='data:image/png;base64,{data}'/>"
+        mysymdata=sym(sympol).getSympolChart()
+        return f"<img src='data:image/png;base64,{mysymdata}'/>"
     except:
         return 'Error'
 
