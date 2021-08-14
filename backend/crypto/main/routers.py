@@ -1,16 +1,17 @@
-from flask import render_template
+from flask import  Blueprint, render_template
+from crypto.services.sympol.main import sympolController as sym
+
 from flask_mail import Message
 from crypto import app
 from crypto.services.mail import MailController
-from crypto.services.sympol.main import sympolController as sym
 
-
+main = Blueprint('main', __name__)
 
 mailController = MailController(app)
 mailController.setConfig()
 
 
-@app.route("/send-email-example")
+@main.route("/send-email-example")
 def index():
     try:
         resources = [
@@ -39,12 +40,12 @@ def index():
     return "Message sent!"
 
 
-@app.route('/')
+@main.route('/')
 def hello():
     return 'Hello World! from Ahmed'
 
 
-@app.route('/html')
+@main.route('/html')
 def html():
     return render_template('mail-template.html', resources=[
         {
@@ -61,30 +62,3 @@ def html():
         },
     ])
 
-# return DataFrame showing sympol movement
-@app.route("/sympolinfo/<sympol>")
-def sympolinfo(sympol='MSFT'):
-    try:
-        msyminfo = sym(sympol).getSympolInfo()
-        return msyminfo
-    except:
-        return 'Error'
-
-# return Chart showing sympol movement        
-@app.route('/sympolchart/<sympol>')
-def sympolchart(sympol='MSFT'):
-    try:
-        mysymdata=sym(sympol).getSympolChart()
-        return f"<img src='data:image/png;base64,{mysymdata}'/>"
-    except:
-        return 'Error'
-
-
-# return Sympol metadata
-@app.route("/sympoldf/<sympol>")
-def sympoldf(sympol='MSFT'):
-    try:
-        df = sym(sympol).getSympolDataFrame()
-        return {'data': df.to_json(), 'status': 200, 'message': f'Sympol: {sympol}'}
-    except:
-        return 'Error'
