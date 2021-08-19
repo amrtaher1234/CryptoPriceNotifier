@@ -5,7 +5,7 @@ from flask_cors import cross_origin
 
 sympol = Blueprint('sympol', __name__)
 
-# return DataFrame showing sympol movement
+# return DataFrame showing sympol Information
 @sympol.route("/sympol/info/<sympol>")
 @cross_origin()
 def sympolinfo(sympol='MSFT'):
@@ -26,7 +26,7 @@ def sympolchart(sympol='MSFT'):
         return 'Error'
 
 
-# return Sympol metadata
+# return Sympol DataFrame
 @sympol.route("/sympol/df/<sympol>")
 @cross_origin()
 def sympoldf(sympol='MSFT'):
