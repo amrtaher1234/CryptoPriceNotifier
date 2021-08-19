@@ -1,11 +1,13 @@
 from flask import  Blueprint
 from crypto.services.sympol.main import sympolController as sym
+from flask_cors import cross_origin
 
 
 sympol = Blueprint('sympol', __name__)
 
 # return DataFrame showing sympol movement
 @sympol.route("/sympol/info/<sympol>")
+@cross_origin()
 def sympolinfo(sympol='MSFT'):
     try:
         msyminfo = sym(sympol).getSympolInfo()
@@ -15,6 +17,7 @@ def sympolinfo(sympol='MSFT'):
 
 # return Chart showing sympol movement        
 @sympol.route('/sympol/chart/<sympol>')
+@cross_origin()
 def sympolchart(sympol='MSFT'):
     try:
         mysymdata=sym(sympol).getSympolChart()
@@ -25,6 +28,7 @@ def sympolchart(sympol='MSFT'):
 
 # return Sympol metadata
 @sympol.route("/sympol/df/<sympol>")
+@cross_origin()
 def sympoldf(sympol='MSFT'):
     try:
         df = sym(sympol).getSympolDataFrame()
