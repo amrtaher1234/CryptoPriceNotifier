@@ -1,3 +1,4 @@
+from matplotlib.pyplot import title
 import yfinance as yf
 from io import BytesIO
 
@@ -22,7 +23,7 @@ class sympolController():
         try:
             plt.switch_backend('agg')
             df = yf.Ticker(self.sympol)
-            fig = df.history(periods='1y', frequency='1').Open.plot(figsize=(10, 6)).get_figure()
+            fig = df.history(periods='1y', frequency='1').Open.plot(figsize=(16, 10), color='blue', title=f'{self.sympol} Chart', ylabel='Price U$').get_figure()
             buf = BytesIO()
             fig.savefig(buf, format="png")
             data = base64.b64encode(buf.getbuffer()).decode("ascii")
