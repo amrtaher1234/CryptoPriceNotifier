@@ -1,14 +1,17 @@
-from flask import Flask, render_template
-from services.mail import MailController
+from flask import  Blueprint, render_template
+from crypto.services.sympol.main import sympolController as sym
+
 from flask_mail import Message
+from crypto import app
+from crypto.services.mail import MailController
 
+main = Blueprint('main', __name__)
 
-app = Flask(__name__)
 mailController = MailController(app)
 mailController.setConfig()
 
 
-@app.route("/send-email-example")
+@main.route("/send-email-example")
 def index():
     try:
         resources = [
@@ -26,7 +29,8 @@ def index():
             },
         ]
         msg = Message('Hello from the other side!',
-                      sender='amrtaher1995@gmail.com', recipients=['amrtaher1995@gmail.com', 'yar2nman@gmail.com'])
+                    #   sender='amrtaher1995@gmail.com', recipients=['amrtaher1995@gmail.com', 'yar2nman@gmail.com'])
+                      sender='amrtaher1995@gmail.com', recipients=['yar2nman@gmail.com'])
         msg.html = render_template('mail-template.html', resources=resources)
         msg.body = "Hello Crypto"
         mailController.sendMessage(msg)
@@ -36,12 +40,12 @@ def index():
     return "Message sent!"
 
 
-@app.route('/')
+@main.route('/')
 def hello():
-    return 'Hello World!'
+    return 'Hello World! from Ahmed'
 
 
-@app.route('/html')
+@main.route('/html')
 def html():
     return render_template('mail-template.html', resources=[
         {
@@ -57,3 +61,4 @@ def html():
             'price': 2
         },
     ])
+
