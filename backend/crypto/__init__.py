@@ -8,7 +8,7 @@ mailController.setConfig()
 
 # from crypto import routes
 
-from crypto.sympol.routes import sympol
+from crypto.symbol.routes import symbol
 from crypto.main.routers import main
-app.register_blueprint(sympol)
+app.register_blueprint(symbol)
 app.register_blueprint(main)

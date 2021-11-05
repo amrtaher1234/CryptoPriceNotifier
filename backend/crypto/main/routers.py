@@ -1,5 +1,5 @@
 from flask import  Blueprint, render_template
-from crypto.services.sympol.main import sympolController as sym
+from crypto.services.symbol.main import symbolController as sym
 
 from flask_mail import Message
 from crypto import app
