@@ -1,9 +1,12 @@
 
-from flask import  Blueprint, render_template
+import io
+from flask import  Blueprint, render_template, send_file, Response
 
 from crypto.services.symbol.main import symbolController as sym
 from flask_cors import cross_origin
 import json
+
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
 
 symbol = Blueprint('symbol', __name__)
@@ -18,19 +21,64 @@ def symbolinfo(symbol='MSFT'):
     except:
         return 'Error'
 
-# return Chart showing symbol movement        
+# return Chart showing symbol movement
 @symbol.route('/symbol/chart/<symbol>')
 @cross_origin()
 def symbolchart(symbol='MSFT'):
     try:
-        mysymdata=sym(symbol).getsymbolChart()
-        return f"<img src='data:image/png;base64,{mysymdata}'/>"
-    except:
-        return 'Error'
+        fig=sym(symbol).getSymbolHistoryChart()
+        output = io.BytesIO()
+        FigureCanvas(fig).print_png(output)
+        return Response(output.getvalue(), mimetype='image/png')
+    except Exception as e:
+        return e
+
+# html to test the chart returned from symbol/chart/symbol
+@symbol.route('/symbol/html/<symbol>')
+@cross_origin()
+def symbolcharthtml(symbol='MSFT'):
+    try:
+        return "<div>"\
+                f"<img src='/symbol/chart/{symbol}'/></div>"\
+                "<div>Hi</div>"
+    except Exception as e:
+        return e
+
+
+# return Chart showing symbol movement including top, buttom, SMA
+@symbol.route('/symbol/tbsignalchart/<symbol>')
+@cross_origin()
+def symboltbchart(symbol='MSFT'):
+    try:
+        bytes_obj=sym(symbol).getSymbolTopButtomCreossChart()
+    
+        return send_file(bytes_obj,
+                     attachment_filename='plot.png',
+                     mimetype='image/png')
+        # output = io.BytesIO()
+        # FigureCanvas(fig).print_png(output)
+        # return Response(output.getvalue(), mimetype='image/png')
+    except Exception as e:
+        return e
+
+# return Chart showing symbol movement including top, buttom, SMA
+@symbol.route('/symbol/longshortsmachart/<symbol>')
+@cross_origin()
+def symboltbchartshortlong(symbol='MSFT'):
+    try:
+        bytes_obj=sym(symbol).getSymbolShortLongSMAChart()
+    
+        return send_file(bytes_obj,
+                     attachment_filename='plot.png',
+                     mimetype='image/png')
+    except Exception as e:
+        return e
+
+
 
 def msymbolchart(symbol='MSFT'):
     try:
-        mysymdata=sym(symbol).getsymbolChart()
+        mysymdata=sym(symbol).getSymbolHistoryChart()
         return mysymdata
         return f"<img src='data:image/png;base64,{mysymdata}'/>"
     except:
@@ -51,7 +99,7 @@ def symboldf(symbol='MSFT'):
 def symbolpage(symbol='MSFT'):
     try:
         resources = {}
-        
+
         msym = json.loads(symbolinfo(symbol).data)['data']
         short_name = msym['shortName']
         long_name = msym['longName']
@@ -61,7 +109,7 @@ def symbolpage(symbol='MSFT'):
 
 
         myrc = msymbolchart(symbol)
-    
+
         return render_template('web-template.html', resources=resources, chart=myrc)
 
     except:
