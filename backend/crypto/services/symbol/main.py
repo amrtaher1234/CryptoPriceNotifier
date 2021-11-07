@@ -64,8 +64,11 @@ class symbolController():
         plt.legend(['upper', 'lower', 'Close', 'SMA'])
         plt.scatter(mf.index[mf.buy_signal], mf[mf.buy_signal].Close, marker='^', c='green' )
         plt.scatter(mf.index[mf.Sell_signal], mf[mf.Sell_signal].Close, marker='^', c='red')
-        # plt.show()
+        plt.grid(which='both')
         bytes_image = io.BytesIO()
+        plt.xlabel('Date')
+        plt.ylabel('Close Price in U$')
+        plt.title(f'{str.upper(self.symbol)} Top Buttom Cross Chart')
         plt.savefig(bytes_image, format='png')
         bytes_image.seek(0)
         return bytes_image
@@ -78,6 +81,7 @@ class symbolController():
         plt.grid(b=True, which='both')
         plt.xlabel('Date')
         plt.ylabel('Close Price')
+        plt.title(f'{str.upper(self.symbol)} Short Long Moving Avarage Chart')
         
         # plt.fill_between(mf.index, mf.lower, mf.upper, color='blue', alpha=0.05)
         plt.legend(['Close', 'SMA', 'SMA50'])
