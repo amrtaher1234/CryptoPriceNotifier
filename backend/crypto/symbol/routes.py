@@ -99,6 +99,7 @@ def symboldf(symbol='MSFT'):
 def symbolpage(symbol='MSFT'):
     try:
         resources = {}
+        resources['symbol'] = symbol
 
         msym = json.loads(symbolinfo(symbol).data)['data']
         short_name = msym['shortName']
@@ -108,9 +109,9 @@ def symbolpage(symbol='MSFT'):
         resources['price'] = msym['currentPrice']
 
 
-        myrc = msymbolchart(symbol)
+        # myrc = msymbolchart(symbol)
 
-        return render_template('web-template.html', resources=resources, chart=myrc)
+        return render_template('web-template.html', resources=resources)
 
     except:
         return 'Error'

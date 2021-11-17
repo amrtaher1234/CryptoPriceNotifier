@@ -51,10 +51,18 @@
         <i><h4>U$</h4></i>
         
     </div>
-
     <hr>
-    <div id="imagediv">
-        <img src='data:image/png;base64,{{chart}}'/>
+    <div id="tbsignalchart">
+        <img src='/symbol/tbsignalchart/{{resources["symbol"]}}'/>
+        <!-- <img src={{chart}}/> -->
+    </div>
+    <div id="chart">
+        <img src='/symbol/chart/{{resources["symbol"]}}'/>
+        <!-- <img src={{chart}}/> -->
+    </div>
+    <div id="longshortsmachart">
+        <img src='/symbol/longshortsmachart/{{resources["symbol"]}}'/>
+        <!-- <img src={{chart}}/> -->
     </div>
 </body>
 </html>
