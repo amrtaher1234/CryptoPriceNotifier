@@ -2,6 +2,7 @@ import io
 from matplotlib.pyplot import title
 from pandas.core.frame import DataFrame
 import pandas as pd
+import pandas_ta as ta
 import yfinance as yf
 from io import BytesIO
 import numpy as np
@@ -32,6 +33,16 @@ class symbolController():
             # add buy and sell signals at each point the close moves beyound the limit
             self.df['buy_signal'] = np.where(self.df['Close'] < self.df['lower'], True, False)
             self.df['Sell_signal'] = np.where(self.df['upper'] < self.df['Close'], True, False)
+
+            # Calculating RSI
+            self.df['diff'] = self.df['Close'].diff(1)
+            self.df['gain'] = self.df['diff'].clip(lower=0).round(2)
+            self.df['loss'] = self.df['diff'].clip(upper=0).abs().round(2)
+
+            # self.df.rsi(close='price', length=14, append=True)
+            self.df['rsi_14'] = ta.rsi(close=self.df['Close'], length=14)
+
+            
 
 
             self.df.to_csv(f'{symbol}.csv')
